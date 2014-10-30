@@ -12,8 +12,8 @@ var button = require("sdk/ui/button/action").ActionButton({
 });
 
 var panel = require("sdk/panel").Panel({
-    contentURL: self.data.url("page.html"),
-    contentScriptFile: [self.data.url("jquery-2.1.1.min.js"), self.data.url("panel-script.js")],
+    contentURL: self.data.url("panel.html"),
+    contentScriptFile: [self.data.url("jquery-2.1.1.min.js"), self.data.url("panel.js")],
     position: button
 });
 function handleClick() {
@@ -21,7 +21,7 @@ function handleClick() {
 }
 tabs.on("ready", function(tab) {
     var worker = tabs.activeTab.attach({
-        contentScriptFile: [self.data.url("jquery-2.1.1.min.js"), self.data.url("page-script.js")]
+        contentScriptFile: [self.data.url("jquery-2.1.1.min.js"), self.data.url("page.js")]
     });
     panel.port.emit("to-panel");
     panel.port.on("from-panel", function(pic) {
