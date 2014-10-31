@@ -1,4 +1,4 @@
 $('body').on('click', 'img', function(){
-    pic = $(this);в
+    pic = $(this);
     self.port.emit("from-panel", pic.attr('src'));
 });
