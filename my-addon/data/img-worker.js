@@ -33,13 +33,13 @@ $(document).ready(function(){
     $('#load').click(function() {
         if (localStorage["myKey"] != null) {
             var contentsOfOldDiv = JSON.parse(localStorage["myKey"]);    
-            $("body").html(contentsOfOldDiv);
+            $("#list").html(contentsOfOldDiv);
         }
     });
     $('#reset').click(function(){
         localStorage.clear();
     });
     $('#save').click(function() {
-        localStorage["myKey"] = JSON.stringify($("body").html());
+        localStorage["myKey"] = JSON.stringify($("#list").html());
     });
 });

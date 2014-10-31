@@ -13,17 +13,16 @@ var button = require("sdk/ui/button/action").ActionButton({
 
 var panel = require("sdk/panel").Panel({
     contentURL: self.data.url("panel.html"),
-    contentScriptFile: [self.data.url("jquery-2.1.1.min.js"), self.data.url("panel.js")],
+    contentScriptFile: [self.data.url("jquery-2.1.1.min.js"), self.data.url("panel.js"), self.data.url("img-worker.js")],
     position: button
 });
 function handleClick() {
     panel.show();
 }
-tabs.on("ready", function(tab) {
+tabs.on("ready", function() {
     var worker = tabs.activeTab.attach({
         contentScriptFile: [self.data.url("jquery-2.1.1.min.js"), self.data.url("page.js")]
     });
-    panel.port.emit("to-panel");
     panel.port.on("from-panel", function(pic) {
         var abs_url = self.data.url(pic);
         worker.port.emit("to-page", abs_url);
