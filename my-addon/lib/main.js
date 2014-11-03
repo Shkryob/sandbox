@@ -19,7 +19,7 @@ var panel = require("sdk/panel").Panel({
 function handleClick() {
     panel.show();
 }
-tabs.on("ready", function() {
+tabs.on("ready", function(tab) {
     var worker = tabs.activeTab.attach({
         contentScriptFile: [self.data.url("jquery-2.1.1.min.js"), self.data.url("page.js")]
     });
@@ -27,4 +27,10 @@ tabs.on("ready", function() {
         var abs_url = self.data.url(pic);
         worker.port.emit("to-page", abs_url);
     });
+});
+tabs.on('activate', function(tab) {
+   console.log(tab.url, 'activate'); 
+});
+tabs.on('deactivate', function(tab) {
+    console.log(tab.url, '--------');
 });
