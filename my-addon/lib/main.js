@@ -16,10 +16,13 @@ var panel = require("sdk/panel").Panel({
     contentScriptFile: [self.data.url("jquery-2.1.1.min.js"), self.data.url("panel.js"), self.data.url("img-worker.js")],
     position: button
 });
+var tabAll = [];
+var tabIs;
+
 function handleClick() {
     panel.show();
-}
-tabs.on("ready", function(tab) {
+    tabAll.push(tabIs);
+    console.log(tabAll);
     var worker = tabs.activeTab.attach({
         contentScriptFile: [self.data.url("jquery-2.1.1.min.js"), self.data.url("page.js")]
     });
@@ -27,7 +30,11 @@ tabs.on("ready", function(tab) {
         var abs_url = self.data.url(pic);
         worker.port.emit("to-page", abs_url);
     });
+}
+tabs.on("ready", function(tab) {
+    tabIs = tab.id;
 });
+
 tabs.on('activate', function(tab) {
    console.log(tab.url, 'activate'); 
 });
