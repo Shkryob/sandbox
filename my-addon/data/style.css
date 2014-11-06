@@ -1,5 +1,36 @@
-.thumb {
+#layouts-list {
+    overflow: hidden;
+}
+.layout {
     height: 75px;
     border: 1px solid #000;
     margin: 10px 5px 0 0;
+    float: left;
+    position: relative;
+}
+.layout > img {
+    max-height: 100%;
+}
+.remove {
+    cursor: pointer;
+    height: 15px;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    width: 15px;
+}
+.remove:before, .remove:after {
+    background: #000000;
+    content: "";
+    height: 2px;
+    position: absolute;
+    top: 7px;
+    transform: rotate(45deg);
+    width: 100%;
+}
+.remove:after {
+    transform: rotate(135deg);
+}
+.checked {
+    opacity: 0.5;
 }

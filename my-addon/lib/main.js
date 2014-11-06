@@ -22,9 +22,12 @@ function handleClick() {
     var worker = tabs.activeTab.attach({
         contentScriptFile: [self.data.url("jquery-2.1.1.min.js"), self.data.url("page.js")]
     });
-    panel.port.on("from-panel", function(pic){;
+    panel.port.on("get-layout", function(pic) {;
         var abs_url = self.data.url(pic);
-        worker.port.emit("to-page", abs_url);
+        worker.port.emit("set-layout", abs_url);
+    });
+    panel.port.on("remove-layout", function() {
+        worker.port.emit("remove-layout1");
     });
     panel.on("hide", function() {
         worker.destroy();
