@@ -16,28 +16,17 @@ var panel = require("sdk/panel").Panel({
     contentScriptFile: [self.data.url("jquery-2.1.1.min.js"), self.data.url("panel.js"), self.data.url("img-worker.js")],
     position: button
 });
-var tabAll = [];
-var tabIs;
 
 function handleClick() {
     panel.show();
-    tabAll.push(tabIs);
-    console.log(tabAll);
     var worker = tabs.activeTab.attach({
         contentScriptFile: [self.data.url("jquery-2.1.1.min.js"), self.data.url("page.js")]
     });
-    panel.port.on("from-panel", function(pic) {
+    panel.port.on("from-panel", function(pic){;
         var abs_url = self.data.url(pic);
         worker.port.emit("to-page", abs_url);
     });
+    panel.on("hide", function() {
+        worker.destroy();
+    });
 }
-tabs.on("ready", function(tab) {
-    tabIs = tab.id;
-});
-
-tabs.on('activate', function(tab) {
-   console.log(tab.url, 'activate'); 
-});
-tabs.on('deactivate', function(tab) {
-    console.log(tab.url, '--------');
-});
