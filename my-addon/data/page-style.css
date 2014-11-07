@@ -1,0 +1,9 @@
+/* LAYOUT STYLES */
+#pixel-on-pixel-layout {
+    cursor: move;
+    left: 0;
+    opacity: 0.5;
+    position: absolute;
+    top: 0;
+    z-index: 9999;
+}

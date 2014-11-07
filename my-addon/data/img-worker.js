@@ -33,14 +33,17 @@ function loadLastSession() {
 function saveCurrentSession() {
     localStorage["session"] = JSON.stringify($("#layouts-list").html());
 }
-
-$(document).ready(function() {
-    $('#files').on('change', handleFileSelect);
-
-    loadLastSession();
+function deleteLayout() {
     $('#layouts-list').on('click', '.remove', function() {
         $(this).parent().remove();
         localStorage.clear();
         saveCurrentSession();
     });
+}
+
+$(document).ready(function() {
+    $('#files').on('change', handleFileSelect);
+
+    loadLastSession();
+    deleteLayout();
 });

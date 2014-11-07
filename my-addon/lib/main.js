@@ -17,18 +17,27 @@ var panel = require("sdk/panel").Panel({
     position: button
 });
 
+var pageMod = require("sdk/page-mod").PageMod({
+    include: ["*"],
+    contentStyleFile: self.data.url("page-style.css")
+});
 function handleClick() {
     panel.show();
+    
     var worker = tabs.activeTab.attach({
-        contentScriptFile: [self.data.url("jquery-2.1.1.min.js"), self.data.url("page.js")]
+        contentScriptFile: [self.data.url("jquery-2.1.1.min.js"), self.data.url("jquery-ui.min.js"), self.data.url("page.js")]
     });
     panel.port.on("get-layout", function(pic) {;
         var abs_url = self.data.url(pic);
         worker.port.emit("set-layout", abs_url);
     });
     panel.port.on("remove-layout", function() {
-        worker.port.emit("remove-layout1");
+        worker.port.emit("remove-layout");
     });
+    worker.port.on("position", function(offset){
+        panel.port.emit("position", offset);
+    });
+    
     panel.on("hide", function() {
         worker.destroy();
     });
