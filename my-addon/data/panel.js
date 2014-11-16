@@ -11,6 +11,7 @@ $('body').on('click', '.layout', function(){
         $(this).removeClass('checked');
     }
 });
-self.port.on("position", function(offset) {
-   console.log(offset);
+self.port.on("position", function(xPos, yPos) {
+   console.log(xPos, yPos);
+   $('#test').html('x' + xPos + ' y' + yPos);
 });

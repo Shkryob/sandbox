@@ -16,29 +16,26 @@ var panel = require("sdk/panel").Panel({
     contentScriptFile: [self.data.url("jquery-2.1.1.min.js"), self.data.url("panel.js"), self.data.url("img-worker.js")],
     position: button
 });
-
 var pageMod = require("sdk/page-mod").PageMod({
     include: ["*"],
     contentStyleFile: self.data.url("page-style.css")
 });
+
+var worker;
+
 function handleClick() {
     panel.show();
-    
-    var worker = tabs.activeTab.attach({
+    worker = tabs.activeTab.attach({
         contentScriptFile: [self.data.url("jquery-2.1.1.min.js"), self.data.url("jquery-ui.min.js"), self.data.url("page.js")]
     });
-    panel.port.on("get-layout", function(pic) {;
-        var abs_url = self.data.url(pic);
-        worker.port.emit("set-layout", abs_url);
-    });
-    panel.port.on("remove-layout", function() {
-        worker.port.emit("remove-layout");
-    });
-    worker.port.on("position", function(offset){
-        panel.port.emit("position", offset);
-    });
-    
-    panel.on("hide", function() {
-        worker.destroy();
+    worker.port.on("position", function(xPos, yPos){
+        panel.port.emit("position", xPos, yPos);
     });
 }
+panel.port.on("get-layout", function(pic) {;
+    var abs_url = self.data.url(pic);
+    worker.port.emit("set-layout", abs_url);
+});
+panel.port.on("remove-layout", function() {
+    worker.port.emit("remove-layout");
+});
