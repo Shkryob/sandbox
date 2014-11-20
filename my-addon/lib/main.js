@@ -11,6 +11,9 @@ var button = require("sdk/ui/button/action").ActionButton({
     onClick: handleClick
 });
 
+var workers = [];
+var worker;
+
 var panel = require("sdk/panel").Panel({
     contentURL: self.data.url("panel.html"),
     contentScriptFile: [self.data.url("jquery-2.1.1.min.js"), self.data.url("panel.js"), self.data.url("img-worker.js")],
@@ -18,26 +21,17 @@ var panel = require("sdk/panel").Panel({
 });
 var pageMod = require("sdk/page-mod").PageMod({
     include: ["*"],
-    contentStyleFile: self.data.url("page-style.css")
-});
-
-var worker;
-var workers = [];
-
-tabs.on("ready", function() {
-    worker_added = false;
-});
-//tabs.on("deactivate", function() {
-//    worker.destroy();
-//    worker_added = false;
-//});
-
-function handleClick() {
-    panel.show();
-    console.log(workers);
-    if (worker_added === false) {
-        worker = tabs.activeTab.attach({
-            contentScriptFile: [self.data.url("jquery-2.1.1.min.js"), self.data.url("jquery-ui.min.js"), self.data.url("page.js")]
+    contentStyleFile: self.data.url("page-style.css"),
+    contentScriptFile: [self.data.url("jquery-2.1.1.min.js"), self.data.url("jquery-ui.min.js"), self.data.url("page.js")],
+    contentScriptWhen: "end",
+    attachTo: 'top',
+    onAttach: function(worker) {
+        workers.push(worker);
+        worker.on("detach", function() {
+            var ind = workers.indexOf(this);
+            if(ind !== -1) {
+                workers.splice(ind, 1);
+            }
         });
         worker.port.on("position", function(xPos, yPos){
             panel.port.emit("position", xPos, yPos);
@@ -49,8 +43,36 @@ function handleClick() {
         panel.port.on("remove-layout", function() {
             worker.port.emit("remove-layout");
         });
-        workers.push(worker);
-        worker_added = true;
+        tabs.on("deactivate", function(){
+            var ind = workers.indexOf(worker);
+            if(ind !== -1) {
+                workers.splice(ind, 1);
+            }
+        });
     }
+});
+
+
+
+function handleClick() {
+    panel.show();
+    console.log(workers);
+//    if (worker_added === false) {
+//        worker = tabs.activeTab.attach({
+//            contentScriptFile: [self.data.url("jquery-2.1.1.min.js"), self.data.url("jquery-ui.min.js"), self.data.url("page.js")]
+//        });
+//        worker.port.on("position", function(xPos, yPos){
+//            panel.port.emit("position", xPos, yPos);
+//        });
+//        workers.push(worker);
+//        tab.on("deactivate", function() {
+//            var ind = workers.indexOf(this);
+//            if(ind !== -1) {
+//                workers.splice(ind, 1);
+//            }
+//        });
+//        worker_added = true;
+//    }
 }
+
 
