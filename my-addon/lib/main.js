@@ -1,5 +1,6 @@
 var tabs = require("sdk/tabs");
 var self = require("sdk/self");
+var workers = require("sdk/content/worker");
 var button = require("sdk/ui/button/action").ActionButton({
     id: "show-panel",
     label: "Show Panel",
@@ -42,12 +43,6 @@ var pageMod = require("sdk/page-mod").PageMod({
         });
         panel.port.on("remove-layout", function() {
             worker.port.emit("remove-layout");
-        });
-        tabs.on("deactivate", function(){
-            var ind = workers.indexOf(worker);
-            if(ind !== -1) {
-                workers.splice(ind, 1);
-            }
         });
     }
 });
