@@ -1,5 +1,4 @@
 self.port.on("set-layout", function(pic) {
-    $('#pixel-on-pixel-layout').remove();
     $('body').append('<img id="pixel-on-pixel-layout" src="' + pic + '">');
     layout = $('#pixel-on-pixel-layout');
 
