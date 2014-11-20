@@ -25,13 +25,16 @@ var worker;
 
 function handleClick() {
     panel.show();
-    worker = tabs.activeTab.attach({
-        contentScriptFile: [self.data.url("jquery-2.1.1.min.js"), self.data.url("jquery-ui.min.js"), self.data.url("page.js")]
-    });
-    worker.port.on("position", function(xPos, yPos){
-        panel.port.emit("position", xPos, yPos);
-    });
 }
+
+worker = tabs.activeTab.attach({
+    contentScriptFile: [self.data.url("jquery-2.1.1.min.js"), self.data.url("jquery-ui.min.js"), self.data.url("page.js")]
+});
+
+worker.port.on("position", function(xPos, yPos){
+    panel.port.emit("position", xPos, yPos);
+});
+
 panel.port.on("get-layout", function(pic) {;
     var abs_url = self.data.url(pic);
     worker.port.emit("set-layout", abs_url);
