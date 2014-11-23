@@ -72,3 +72,7 @@ panel.port.on("remove-layout", function() {
     worker.port.emit("remove-layout");
     tabs.activeTab.layoutActive = false;
 });
+
+tabs.on('activate', function(tab) {
+    panel.port.emit("set-active-image", tab.picURL);
+});
